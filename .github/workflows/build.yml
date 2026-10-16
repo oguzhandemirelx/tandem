@@ -1,0 +1,28 @@
+name: Build and routing tests
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Build app
+        run: bash scripts/build.sh
+      - name: Routing and keyboard tests
+        run: bash scripts/test.sh
+      - name: Verify signature and property list
+        run: |
+          codesign --verify --strict build/Tandem.app
+          plutil -lint build/Tandem.app/Contents/Info.plist
+          ditto -c -k --norsrc --noextattr --noqtn --keepParent build/Tandem.app build/Tandem.zip
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: Tandem-development
+          path: build/Tandem.zip
+          retention-days: 7

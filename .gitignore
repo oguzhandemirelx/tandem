@@ -1,0 +1,17 @@
+build/
+.research/
+.DS_Store
+*.xcuserstate
+.env
+.env.*
+*.p12
+*.pfx
+*.p8
+*.pem
+*.key
+*.cer
+*.certSigningRequest
+*.keychain
+*.keychain-db
+credentials*.json
+secrets*.json
